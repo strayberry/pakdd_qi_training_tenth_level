@@ -1,0 +1,30 @@
+FROM registry.cn-shanghai.aliyuncs.com/tcc-public/python:3
+MAINTAINER Berry Yan <strayberry0w0@gmail.com>
+
+## 把当前文件夹里的文件构建到镜像的根目录下,并设置为默认工作目录 
+ADD . / 
+WORKDIR / 
+
+## 下载数据集
+WORKDIR /data/round1_b_test/ 
+RUN \
+        wget  https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E6%B5%8B%E8%AF%95%E9%9B%86/%E5%88%9D%E8%B5%9BB%E6%A6%9Cnew/memory_sample_address_log_round1_b1_test.csv.zip \
+    &&  wget https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E6%B5%8B%E8%AF%95%E9%9B%86/%E5%88%9D%E8%B5%9BB%E6%A6%9Cnew/memory_sample_kernel_log_round1_b1_test.csv.zip \
+    &&  wget https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E6%B5%8B%E8%AF%95%E9%9B%86/%E5%88%9D%E8%B5%9BB%E6%A6%9Cnew/memory_sample_mce_log_round1_b1_test.csv.zip \
+    &&  find . -name "memory_sample_*.zip" | xargs -n1 unzip
+
+WORKDIR /data/round1_train/ 
+RUN \
+        wget  https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E8%AE%AD%E7%BB%83%E9%9B%86/memory_sample_address_log_round1_a_train.zip \
+    &&  wget https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E8%AE%AD%E7%BB%83%E9%9B%86/memory_sample_failure_tag_round1_a_train.zip \
+    &&  wget https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E8%AE%AD%E7%BB%83%E9%9B%86/memory_sample_kernel_log_round1_a_train.zip \
+    &&  wget https://tianchi-competition.oss-cn-hangzhou.aliyuncs.com/531874/%E8%AE%AD%E7%BB%83%E9%9B%86/memory_sample_mce_log_round1_a_train.zip \
+    &&  find . -name "memory_sample_*.zip" | xargs -n1 unzip
+
+
+## 安装python依赖包 
+WORKDIR / 
+RUN set -ex && pip3 install -r ./code/requirements.txt
+
+## 镜像启动后统一执行 sh run.sh 
+CMD ["sh", "run.sh"]
