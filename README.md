@@ -1,4 +1,4 @@
-# PAKDD2021 第二届阿里云智能运维算法大赛
+# PAKDD2021 2nd ALIBABA CLOUD AIOPS COMPETITION
 团队名称：练气十级
 
 ## 解决方案及算法
